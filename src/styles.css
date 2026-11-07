@@ -93,3 +93,26 @@ td .acciones button {
   padding: 0.35rem 0.7rem;
   font-size: 0.85rem;
 }
+
+.estado {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--color-fondo);
+}
+
+.estado[data-estado='CONFIRMADO'] {
+  background: #dbeafe;
+}
+
+.estado[data-estado='COMPLETADO'] {
+  background: #dcfce7;
+}
+
+.estado[data-estado='AUSENTE'] {
+  background: #fef3c7;
+}
+
+.estado[data-estado='CANCELADO'] {
+  background: #fee2e2;
+}

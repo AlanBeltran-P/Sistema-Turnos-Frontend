@@ -1,17 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EstadoTurno, TurnoAgendaResponse } from '../../../core/models/turno.model';
+import { ETIQUETAS_ESTADO, EstadoTurno, TurnoAgendaResponse } from '../../../core/models/turno.model';
 import { TurnoService } from '../../../core/services/turno.service';
 import { fechaEnDias } from '../../../shared/utils/tiempo';
-
-const ETIQUETAS_ESTADO: Record<EstadoTurno, string> = {
-  PENDIENTE: 'Pendiente',
-  CONFIRMADO: 'Confirmado',
-  CANCELADO: 'Cancelado',
-  COMPLETADO: 'Completado',
-  AUSENTE: 'Ausente',
-};
 
 @Component({
   selector: 'app-agenda',

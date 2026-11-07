@@ -6,6 +6,7 @@ import { SlotDisponibleResponse } from '../../core/models/disponibilidad.model';
 import { ProfesionalPublicoResponse } from '../../core/models/profesional.model';
 import { ServicioResponse } from '../../core/models/servicio.model';
 import { ReservaRequest, TurnoResponse } from '../../core/models/turno.model';
+import { ClienteAuthService } from '../../core/services/cliente-auth.service';
 import { PublicService } from '../../core/services/public.service';
 import { fechaEnDias } from '../../shared/utils/tiempo';
 
@@ -19,6 +20,9 @@ import { fechaEnDias } from '../../shared/utils/tiempo';
 export class Reserva implements OnInit {
   private readonly publicService = inject(PublicService);
   private readonly slug = inject(ActivatedRoute).snapshot.paramMap.get('slug') ?? '';
+  private readonly clienteAuth = inject(ClienteAuthService);
+
+  protected readonly cliente = this.clienteAuth.cliente;
 
   protected readonly hoy = fechaEnDias(0);
   protected readonly profesional = signal<ProfesionalPublicoResponse | null>(null);
@@ -37,6 +41,7 @@ export class Reserva implements OnInit {
   protected readonly email = signal('');
 
   ngOnInit(): void {
+    this.completarDatosDelCliente();
     this.publicService.obtenerProfesional(this.slug).subscribe({
       next: (profesional) => this.profesional.set(profesional),
       error: (error: Error) => this.error.set(error.message),
@@ -99,6 +104,16 @@ export class Reserva implements OnInit {
       next: (horarios) => this.horarios.set(horarios),
       error: (error: Error) => this.error.set(error.message),
     });
+  }
+
+  /** Si el cliente ingresó a su cuenta, no hace falta que escriba sus datos. */
+  private completarDatosDelCliente(): void {
+    const cliente = this.clienteAuth.cliente();
+    if (cliente) {
+      this.nombre.set(cliente.nombre);
+      this.telefono.set(cliente.telefono);
+      this.email.set(cliente.email);
+    }
   }
 
   private armarReserva(servicio: ServicioResponse, hora: string): ReservaRequest {

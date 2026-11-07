@@ -1,0 +1,14 @@
+<div class="panel">
+  <aside class="menu">
+    <p class="nombre">{{ cliente()?.nombre }}</p>
+    <nav>
+      <a routerLink="turnos" routerLinkActive="activo">Mis turnos</a>
+      <a [routerLink]="['/reservar', slugDemo]">Reservar un turno</a>
+    </nav>
+    <button type="button" class="secundario" (click)="salir()">Salir</button>
+  </aside>
+
+  <main class="contenido">
+    <router-outlet />
+  </main>
+</div>

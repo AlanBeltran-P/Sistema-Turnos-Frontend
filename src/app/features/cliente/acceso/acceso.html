@@ -1,0 +1,46 @@
+<main class="acceso">
+  <h1>Mi cuenta</h1>
+  <p class="ayuda">Ingresá para ver y cancelar tus turnos. Cuenta demo: ana@demo.com / 12345678</p>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <div class="formularios">
+    <form class="tarjeta" #ingreso="ngForm" (ngSubmit)="ingresar()">
+      <h2>Ingresar</h2>
+      <label>
+        Email
+        <input name="email" type="email" [(ngModel)]="email" required email />
+      </label>
+      <label>
+        Contraseña
+        <input name="password" type="password" [(ngModel)]="password" required />
+      </label>
+      <button type="submit" [disabled]="ingreso.invalid">Ingresar</button>
+    </form>
+
+    <form class="tarjeta" #registro="ngForm" (ngSubmit)="crearCuenta()">
+      <h2>Crear cuenta</h2>
+      <label>
+        Nombre
+        <input name="nombre" [(ngModel)]="nombre" required />
+      </label>
+      <label>
+        Email
+        <input name="nuevoEmail" type="email" [(ngModel)]="nuevoEmail" required email />
+      </label>
+      <label>
+        Teléfono
+        <input name="telefono" type="tel" [(ngModel)]="telefono" required />
+      </label>
+      <label>
+        Contraseña (mínimo 8 caracteres)
+        <input name="nuevaPassword" type="password" [(ngModel)]="nuevaPassword" required minlength="8" />
+      </label>
+      <button type="submit" [disabled]="registro.invalid">Crear cuenta</button>
+    </form>
+  </div>
+
+  <a routerLink="/">Volver al inicio</a>
+</main>

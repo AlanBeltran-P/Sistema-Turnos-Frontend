@@ -1,5 +1,13 @@
 export type EstadoTurno = 'PENDIENTE' | 'CONFIRMADO' | 'CANCELADO' | 'COMPLETADO' | 'AUSENTE';
 
+export const ETIQUETAS_ESTADO: Record<EstadoTurno, string> = {
+  PENDIENTE: 'Pendiente',
+  CONFIRMADO: 'Confirmado',
+  CANCELADO: 'Cancelado',
+  COMPLETADO: 'Completado',
+  AUSENTE: 'Ausente',
+};
+
 /** Fechas con hora en formato "yyyy-MM-ddTHH:mm". */
 export interface ReservaRequest {
   servicioPublicId: string;

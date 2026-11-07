@@ -1,0 +1,63 @@
+<h1>Mis turnos</h1>
+
+<h2>Próximos</h2>
+@if (proximos().length === 0) {
+  <p>No tenés turnos próximos. <a [routerLink]="['/reservar', slugDemo]">Reservá uno</a>.</p>
+} @else {
+  <table class="tarjeta">
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>Hora</th>
+        <th>Servicio</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (turno of proximos(); track turno.publicId) {
+        <tr>
+          <td>{{ turno.fechaHoraInicio | date: 'EEE d/M' }}</td>
+          <td>{{ turno.fechaHoraInicio | date: 'HH:mm' }} a {{ turno.fechaHoraFin | date: 'HH:mm' }}</td>
+          <td>{{ turno.servicioNombre }}</td>
+          <td>
+            <span class="estado" [attr.data-estado]="turno.estado">{{ etiquetas[turno.estado] }}</span>
+          </td>
+          <td>
+            <div class="acciones">
+              <button type="button" class="secundario" (click)="cancelar(turno)">Cancelar</button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+<h2>Historial</h2>
+@if (historial().length === 0) {
+  <p>Todavía no tenés turnos anteriores.</p>
+} @else {
+  <table class="tarjeta">
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>Hora</th>
+        <th>Servicio</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (turno of historial(); track turno.publicId) {
+        <tr>
+          <td>{{ turno.fechaHoraInicio | date: 'EEE d/M/yyyy' }}</td>
+          <td>{{ turno.fechaHoraInicio | date: 'HH:mm' }}</td>
+          <td>{{ turno.servicioNombre }}</td>
+          <td>
+            <span class="estado" [attr.data-estado]="turno.estado">{{ etiquetas[turno.estado] }}</span>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

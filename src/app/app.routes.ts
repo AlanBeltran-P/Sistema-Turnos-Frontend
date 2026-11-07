@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { clienteGuard } from './core/guards/cliente.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,22 @@ export const routes: Routes = [
   {
     path: 'cancelar/:token',
     loadComponent: () => import('./features/cancelar/cancelar').then((m) => m.Cancelar),
+  },
+  {
+    path: 'cliente/ingresar',
+    loadComponent: () => import('./features/cliente/acceso/acceso').then((m) => m.Acceso),
+  },
+  {
+    path: 'cliente',
+    canActivate: [clienteGuard],
+    loadComponent: () => import('./features/cliente/cliente-layout/cliente-layout').then((m) => m.ClienteLayout),
+    children: [
+      { path: '', redirectTo: 'turnos', pathMatch: 'full' },
+      {
+        path: 'turnos',
+        loadComponent: () => import('./features/cliente/mis-turnos/mis-turnos').then((m) => m.MisTurnos),
+      },
+    ],
   },
   {
     path: 'panel',

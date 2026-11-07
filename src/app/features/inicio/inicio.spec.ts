@@ -18,6 +18,7 @@ describe('Inicio', () => {
   it('tiene la entrada para clientes: reservar y cancelar', () => {
     expect(tieneLink('/reservar/laura-gomez')).toBe(true);
     expect(tieneLink('/cancelar')).toBe(true);
+    expect(tieneLink('/cliente/turnos')).toBe(true);
   });
 
   it('tiene la entrada para profesionales', () => {

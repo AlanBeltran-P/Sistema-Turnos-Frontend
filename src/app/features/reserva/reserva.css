@@ -4,6 +4,10 @@
   padding: 2rem 1rem;
 }
 
+.ayuda {
+  color: var(--color-suave);
+}
+
 .subtitulo {
   margin-top: -0.5rem;
   color: var(--color-suave);

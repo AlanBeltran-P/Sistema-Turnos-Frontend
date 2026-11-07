@@ -25,6 +25,9 @@
           O guardá este link:
           <a [routerLink]="['/cancelar', turno.cancelacionToken]">cancelar mi turno</a>
         </p>
+        @if (cliente()) {
+          <p><a routerLink="/cliente/turnos">Ver mis turnos</a></p>
+        }
         <button type="button" class="secundario" (click)="cancelar()">Cancelar turno</button>
       }
     </section>
@@ -76,6 +79,9 @@
     @if (horaElegida()) {
       <section>
         <h2>4. Tus datos</h2>
+        @if (cliente(); as cliente) {
+          <p class="ayuda">Reservás con tu cuenta ({{ cliente.email }}): el turno va a aparecer en "Mis turnos".</p>
+        }
         <form class="formulario" #formulario="ngForm" (ngSubmit)="reservar()">
           <label>
             Nombre
