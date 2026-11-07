@@ -1,0 +1,55 @@
+.reserva {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.opcion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: white;
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+}
+
+.opcion:hover {
+  background: white;
+  border-color: var(--color-primario);
+}
+
+.opcion.elegida {
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+  color: white;
+}
+
+.opcion span {
+  font-size: 0.85rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+code {
+  word-break: break-all;
+}

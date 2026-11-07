@@ -1,0 +1,90 @@
+<main class="reserva">
+  <h1>Reservá tu turno</h1>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (turno(); as turno) {
+    <section class="tarjeta">
+      @if (cancelado()) {
+        <h2>Turno cancelado</h2>
+        <p>Tu turno de {{ turno.servicioNombre }} fue cancelado.</p>
+      } @else {
+        <h2>¡Turno reservado!</h2>
+        <p>
+          <strong>{{ turno.servicioNombre }}</strong> —
+          {{ turno.fechaHoraInicio | date: "EEEE d/M/yyyy 'a las' HH:mm" }} hs
+        </p>
+        <p>Guardá este código por si necesitás cancelar:</p>
+        <p><code>{{ turno.cancelacionToken }}</code></p>
+        <button type="button" class="secundario" (click)="cancelar()">Cancelar turno</button>
+      }
+    </section>
+  } @else {
+    <section>
+      <h2>1. Elegí un servicio</h2>
+      <div class="opciones">
+        @for (servicio of servicios(); track servicio.publicId) {
+          <button
+            type="button"
+            class="opcion"
+            [class.elegida]="servicio.publicId === servicioElegido()?.publicId"
+            (click)="elegirServicio(servicio)"
+          >
+            <strong>{{ servicio.nombre }}</strong>
+            <span>{{ servicio.duracionMin }} min · {{ servicio.precio | currency: 'ARS' : 'symbol-narrow' : '1.0-0' }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    @if (servicioElegido()) {
+      <section>
+        <h2>2. Elegí el día</h2>
+        <input type="date" name="fecha" [min]="hoy" [ngModel]="fecha()" (ngModelChange)="elegirFecha($event)" />
+      </section>
+    }
+
+    @if (servicioElegido() && fecha()) {
+      <section>
+        <h2>3. Elegí el horario</h2>
+        <div class="opciones">
+          @for (horario of horarios(); track horario.horaInicio) {
+            <button
+              type="button"
+              class="opcion"
+              [class.elegida]="horario.horaInicio === horaElegida()"
+              (click)="elegirHora(horario.horaInicio)"
+            >
+              {{ horario.horaInicio }}
+            </button>
+          } @empty {
+            <p>No hay horarios libres ese día. Probá con otra fecha.</p>
+          }
+        </div>
+      </section>
+    }
+
+    @if (horaElegida()) {
+      <section>
+        <h2>4. Tus datos</h2>
+        <form class="formulario" #formulario="ngForm" (ngSubmit)="reservar()">
+          <label>
+            Nombre
+            <input name="nombre" [(ngModel)]="nombre" required />
+          </label>
+          <label>
+            Teléfono
+            <input name="telefono" type="tel" [(ngModel)]="telefono" required />
+          </label>
+          <label>
+            Email (opcional)
+            <input name="email" type="email" [(ngModel)]="email" email />
+          </label>
+          <button type="submit" [disabled]="formulario.invalid">Reservar turno</button>
+        </form>
+      </section>
+    }
+  }
+</main>

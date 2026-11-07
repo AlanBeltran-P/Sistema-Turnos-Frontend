@@ -1,1 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-primario: #2563eb;
+  --color-primario-oscuro: #1d4ed8;
+  --color-texto: #1f2937;
+  --color-suave: #6b7280;
+  --color-borde: #d1d5db;
+  --color-fondo: #f3f4f6;
+  --color-error: #b91c1c;
+  --radio: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: var(--radio);
+  background: var(--color-primario);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--color-primario-oscuro);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.secundario {
+  background: white;
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+}
+
+input,
+select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  font: inherit;
+}
+
+.tarjeta {
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--radio);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.error {
+  color: var(--color-error);
+}
