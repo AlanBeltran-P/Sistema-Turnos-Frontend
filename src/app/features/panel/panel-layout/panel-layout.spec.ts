@@ -22,6 +22,11 @@ describe('PanelLayout', () => {
     expect(textoEnPantalla(fixture)).toContain('Laura Gómez');
   });
 
+  it('muestra las cuatro secciones en el menú', () => {
+    const links = Array.from(fixture.nativeElement.querySelectorAll('nav a')) as HTMLElement[];
+    expect(links.map((link) => link.textContent?.trim())).toEqual(['Agenda', 'Servicios', 'Horarios', 'Excepciones']);
+  });
+
   it('tiene el link a la página pública de reservas', () => {
     expect(fixture.nativeElement.querySelector('a[href="/reservar/laura-gomez"]')).toBeTruthy();
   });

@@ -1,0 +1,69 @@
+<h1>Excepciones</h1>
+<p class="ayuda">Días u horarios puntuales en los que no atendés (vacaciones, feriados, trámites).</p>
+
+<form class="tarjeta" #formulario="ngForm" (ngSubmit)="guardar()">
+  <h2>Nueva excepción</h2>
+  <div class="campos">
+    <label>
+      Fecha
+      <input name="fecha" type="date" [min]="hoy" [(ngModel)]="fecha" required />
+    </label>
+    <label class="checkbox">
+      <input name="todoElDia" type="checkbox" [(ngModel)]="todoElDia" />
+      Todo el día
+    </label>
+    @if (!todoElDia()) {
+      <label>
+        Desde
+        <input name="horaInicio" type="time" [(ngModel)]="horaInicio" required />
+      </label>
+      <label>
+        Hasta
+        <input name="horaFin" type="time" [(ngModel)]="horaFin" required />
+      </label>
+    }
+    <label>
+      Motivo (opcional)
+      <input name="motivo" [(ngModel)]="motivo" />
+    </label>
+  </div>
+  @if (!horarioValido()) {
+    <p class="error">La hora de fin tiene que ser posterior a la de inicio.</p>
+  }
+  <button type="submit" [disabled]="formulario.invalid || !horarioValido()">Agregar excepción</button>
+</form>
+
+@if (excepciones().length === 0) {
+  <p>No tenés excepciones cargadas.</p>
+} @else {
+  <table class="tarjeta">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Horario</th>
+        <th>Motivo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (excepcion of excepciones(); track excepcion.id) {
+        <tr>
+          <td>{{ excepcion.fecha | date: 'EEE d/M/yyyy' }}</td>
+          <td>
+            @if (excepcion.horaInicio) {
+              {{ excepcion.horaInicio }} a {{ excepcion.horaFin }}
+            } @else {
+              Todo el día
+            }
+          </td>
+          <td>{{ excepcion.motivo ?? '—' }}</td>
+          <td>
+            <div class="acciones">
+              <button type="button" class="secundario" (click)="eliminar(excepcion)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

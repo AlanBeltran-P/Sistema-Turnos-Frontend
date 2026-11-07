@@ -1,0 +1,23 @@
+h1 {
+  margin-top: 0;
+}
+
+form {
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inactivo {
+  color: var(--color-suave);
+}

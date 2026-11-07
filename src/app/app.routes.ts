@@ -21,6 +21,19 @@ export const routes: Routes = [
         path: 'agenda',
         loadComponent: () => import('./features/panel/agenda/agenda').then((m) => m.Agenda),
       },
+      {
+        path: 'servicios',
+        loadComponent: () => import('./features/panel/servicios/servicios').then((m) => m.Servicios),
+      },
+      {
+        path: 'disponibilidad',
+        loadComponent: () =>
+          import('./features/panel/disponibilidad/disponibilidad').then((m) => m.Disponibilidad),
+      },
+      {
+        path: 'excepciones',
+        loadComponent: () => import('./features/panel/excepciones/excepciones').then((m) => m.Excepciones),
+      },
     ],
   },
 ];

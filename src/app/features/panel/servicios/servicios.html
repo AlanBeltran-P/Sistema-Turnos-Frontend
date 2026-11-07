@@ -1,0 +1,57 @@
+<h1>Servicios</h1>
+
+<form class="tarjeta" #formulario="ngForm" (ngSubmit)="guardar()">
+  <h2>{{ editando() ? 'Editar servicio' : 'Nuevo servicio' }}</h2>
+  <div class="campos">
+    <label>
+      Nombre
+      <input name="nombre" [(ngModel)]="nombre" required />
+    </label>
+    <label>
+      Duración (minutos)
+      <input name="duracionMin" type="number" [(ngModel)]="duracionMin" required min="5" />
+    </label>
+    <label>
+      Precio
+      <input name="precio" type="number" [(ngModel)]="precio" required min="1" />
+    </label>
+  </div>
+  <div class="acciones">
+    <button type="submit" [disabled]="formulario.invalid">
+      {{ editando() ? 'Guardar cambios' : 'Agregar servicio' }}
+    </button>
+    @if (editando()) {
+      <button type="button" class="secundario" (click)="limpiarFormulario()">Cancelar</button>
+    }
+  </div>
+</form>
+
+<table class="tarjeta">
+  <thead>
+    <tr>
+      <th>Servicio</th>
+      <th>Duración</th>
+      <th>Precio</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (servicio of servicios(); track servicio.publicId) {
+      <tr [class.inactivo]="!servicio.activo">
+        <td>{{ servicio.nombre }}</td>
+        <td>{{ servicio.duracionMin }} min</td>
+        <td>{{ servicio.precio | currency: 'ARS' : 'symbol-narrow' : '1.0-0' }}</td>
+        <td>{{ servicio.activo ? 'Activo' : 'Inactivo' }}</td>
+        <td>
+          @if (servicio.activo) {
+            <div class="acciones">
+              <button type="button" class="secundario" (click)="editar(servicio)">Editar</button>
+              <button type="button" class="secundario" (click)="desactivar(servicio)">Desactivar</button>
+            </div>
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

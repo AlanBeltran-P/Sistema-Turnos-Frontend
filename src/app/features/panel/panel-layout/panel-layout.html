@@ -3,6 +3,9 @@
     <p class="nombre">{{ profesional.nombre }}</p>
     <nav>
       <a routerLink="agenda" routerLinkActive="activo">Agenda</a>
+      <a routerLink="servicios" routerLinkActive="activo">Servicios</a>
+      <a routerLink="disponibilidad" routerLinkActive="activo">Horarios</a>
+      <a routerLink="excepciones" routerLinkActive="activo">Excepciones</a>
     </nav>
     <a class="link-publico" [routerLink]="['/reservar', profesional.slug]">Ver mi página de reservas</a>
     <button type="button" class="secundario" (click)="salir()">Salir</button>

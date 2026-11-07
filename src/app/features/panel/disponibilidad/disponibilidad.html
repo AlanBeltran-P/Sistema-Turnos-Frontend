@@ -1,0 +1,60 @@
+<h1>Horarios de atención</h1>
+
+<form class="tarjeta" #formulario="ngForm" (ngSubmit)="guardar()">
+  <h2>{{ editando() ? 'Editar horario' : 'Nuevo horario' }}</h2>
+  <div class="campos">
+    <label>
+      Día
+      <select name="diaSemana" [(ngModel)]="diaSemana">
+        @for (nombre of nombresDias; track $index) {
+          <option [ngValue]="$index">{{ nombre }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Desde
+      <input name="horaInicio" type="time" [(ngModel)]="horaInicio" required />
+    </label>
+    <label>
+      Hasta
+      <input name="horaFin" type="time" [(ngModel)]="horaFin" required />
+    </label>
+  </div>
+  @if (!horarioValido()) {
+    <p class="error">La hora de fin tiene que ser posterior a la de inicio.</p>
+  }
+  <div class="acciones">
+    <button type="submit" [disabled]="formulario.invalid || !horarioValido()">
+      {{ editando() ? 'Guardar cambios' : 'Agregar horario' }}
+    </button>
+    @if (editando()) {
+      <button type="button" class="secundario" (click)="limpiarFormulario()">Cancelar</button>
+    }
+  </div>
+</form>
+
+<table class="tarjeta">
+  <thead>
+    <tr>
+      <th>Día</th>
+      <th>Desde</th>
+      <th>Hasta</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (disponibilidad of disponibilidades(); track disponibilidad.id) {
+      <tr>
+        <td>{{ nombresDias[disponibilidad.diaSemana] }}</td>
+        <td>{{ disponibilidad.horaInicio }}</td>
+        <td>{{ disponibilidad.horaFin }}</td>
+        <td>
+          <div class="acciones">
+            <button type="button" class="secundario" (click)="editar(disponibilidad)">Editar</button>
+            <button type="button" class="secundario" (click)="eliminar(disponibilidad)">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

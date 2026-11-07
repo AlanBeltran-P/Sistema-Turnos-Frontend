@@ -44,12 +44,6 @@ section {
   gap: 1rem;
 }
 
-.formulario label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 code {
   word-break: break-all;
 }
