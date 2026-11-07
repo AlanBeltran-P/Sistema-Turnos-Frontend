@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { SERVICIOS_MOCK } from '../mocks/datos-mock';
+import { MockDb } from '../mocks/mock-db';
 import { ReservaRequest } from '../models/turno.model';
 import { PublicService } from './public.service';
 
@@ -54,6 +55,12 @@ describe('PublicService', () => {
     expect(turno.estado).toBe('PENDIENTE');
     expect(turno.fechaHoraFin).toBe(`${LUNES}T09:30`);
     expect(turno.cancelacionToken).toBeTruthy();
+  });
+
+  it('una reserva sin sesión no queda asociada a ningún cliente', async () => {
+    const turno = await firstValueFrom(service.reservar(SLUG, reservaDeCorte('09:00')));
+    const guardado = TestBed.inject(MockDb).turnos.find((t) => t.publicId === turno.publicId);
+    expect(guardado?.clientePublicId).toBeNull();
   });
 
   it('un horario reservado deja de estar disponible', async () => {

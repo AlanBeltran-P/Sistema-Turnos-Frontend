@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { aHora, aMinutos, diaHabilEnDias, diaSemana, formatoFecha } from './tiempo';
+import { aHora, aMinutos, diaHabilEnDias, diaSemana, formatoFecha, sumarDias } from './tiempo';
 
 describe('tiempo', () => {
   it('convierte "HH:mm" a minutos', () => {
@@ -17,6 +17,16 @@ describe('tiempo', () => {
   it('usa domingo = 0 igual que el back', () => {
     expect(diaSemana('2030-01-06')).toBe(0); // domingo
     expect(diaSemana('2030-01-07')).toBe(1); // lunes
+  });
+});
+
+describe('sumarDias', () => {
+  it('resta días cruzando de año', () => {
+    expect(sumarDias('2030-01-07', -7)).toBe('2029-12-31');
+  });
+
+  it('suma días cruzando de mes', () => {
+    expect(sumarDias('2030-01-31', 1)).toBe('2030-02-01');
   });
 });
 

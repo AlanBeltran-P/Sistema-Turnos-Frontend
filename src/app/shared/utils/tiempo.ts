@@ -26,6 +26,13 @@ export function fechaEnDias(dias: number): string {
   return formatoFecha(fecha);
 }
 
+/** Suma días a una fecha "yyyy-MM-dd" (resta si el número es negativo). */
+export function sumarDias(fecha: string, dias: number): string {
+  const resultado = new Date(`${fecha}T00:00`);
+  resultado.setDate(resultado.getDate() + dias);
+  return formatoFecha(resultado);
+}
+
 /** Día de la semana con la convención del back: domingo = 0 ... sábado = 6. */
 export function diaSemana(fecha: string): number {
   return new Date(`${fecha}T00:00`).getDay();

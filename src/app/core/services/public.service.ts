@@ -3,16 +3,19 @@ import { Observable, of, throwError } from 'rxjs';
 import { aHora, aMinutos } from '../../shared/utils/tiempo';
 import { calcularSlots } from '../mocks/calculadora-slots';
 import { TurnoMock } from '../mocks/datos-mock';
+import { aTurnoResponse } from '../mocks/mapeo-turnos';
 import { MockDb } from '../mocks/mock-db';
 import { SlotDisponibleResponse } from '../models/disponibilidad.model';
 import { ProfesionalPublicoResponse } from '../models/profesional.model';
 import { ServicioResponse } from '../models/servicio.model';
 import { ReservaRequest, TurnoResponse } from '../models/turno.model';
+import { ClienteAuthService } from './cliente-auth.service';
 
 /** Simula /api/public (reserva sin login). */
 @Injectable({ providedIn: 'root' })
 export class PublicService {
   private readonly db = inject(MockDb);
+  private readonly clienteAuth = inject(ClienteAuthService);
 
   /** No existe en el back: habría que agregar GET /api/public/profesionales/{slug}. */
   obtenerProfesional(slug: string): Observable<ProfesionalPublicoResponse> {
@@ -47,7 +50,8 @@ export class PublicService {
     if (!slots.some((slot) => slot.horaInicio === hora)) {
       return error('El horario ya no está disponible');
     }
-    const turno = crearTurno(request, servicio);
+    const clientePublicId = this.clienteAuth.cliente()?.publicId ?? null;
+    const turno = crearTurno(request, servicio, clientePublicId);
     this.db.turnos = [...this.db.turnos, turno];
     return of(aTurnoResponse(turno));
   }
@@ -77,7 +81,7 @@ function error(mensaje: string): Observable<never> {
   return throwError(() => new Error(mensaje));
 }
 
-function crearTurno(request: ReservaRequest, servicio: ServicioResponse): TurnoMock {
+function crearTurno(request: ReservaRequest, servicio: ServicioResponse, clientePublicId: string | null): TurnoMock {
   const [fecha, hora] = request.fechaHoraInicio.split('T');
   return {
     publicId: crypto.randomUUID(),
@@ -90,16 +94,6 @@ function crearTurno(request: ReservaRequest, servicio: ServicioResponse): TurnoM
     fechaHoraFin: `${fecha}T${aHora(aMinutos(hora) + servicio.duracionMin)}`,
     estado: 'PENDIENTE',
     cancelacionToken: crypto.randomUUID(),
-  };
-}
-
-function aTurnoResponse(turno: TurnoMock): TurnoResponse {
-  return {
-    publicId: turno.publicId,
-    servicioNombre: turno.servicioNombre,
-    fechaHoraInicio: turno.fechaHoraInicio,
-    fechaHoraFin: turno.fechaHoraFin,
-    estado: turno.estado,
-    cancelacionToken: turno.cancelacionToken,
+    clientePublicId,
   };
 }

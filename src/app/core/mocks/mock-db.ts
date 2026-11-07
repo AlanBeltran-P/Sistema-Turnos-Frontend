@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  CLIENTES_MOCK,
   DISPONIBILIDADES_MOCK,
   EXCEPCIONES_MOCK,
   PROFESIONAL_MOCK,
@@ -19,6 +20,7 @@ export class MockDb {
   disponibilidades = structuredClone(DISPONIBILIDADES_MOCK);
   excepciones = structuredClone(EXCEPCIONES_MOCK);
   turnos: TurnoMock[] = structuredClone(TURNOS_MOCK);
+  clientes = structuredClone(CLIENTES_MOCK);
 
   private ultimoId = 100;
 

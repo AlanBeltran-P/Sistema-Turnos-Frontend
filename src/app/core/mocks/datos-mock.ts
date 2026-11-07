@@ -1,4 +1,5 @@
-import { aHora, aMinutos, diaHabilEnDias } from '../../shared/utils/tiempo';
+import { aHora, aMinutos, diaHabilEnDias, sumarDias } from '../../shared/utils/tiempo';
+import { ClienteResponse } from '../models/cliente.model';
 import { DisponibilidadResponse } from '../models/disponibilidad.model';
 import { ExcepcionResponse } from '../models/excepcion.model';
 import { ProfesionalResponse } from '../models/profesional.model';
@@ -9,6 +10,12 @@ import { EstadoTurno, TurnoAgendaResponse } from '../models/turno.model';
 export interface TurnoMock extends TurnoAgendaResponse {
   servicioPublicId: string;
   cancelacionToken: string;
+  clientePublicId: string | null; // null = reservado sin cuenta
+}
+
+/** Cliente tal como lo guarda el mock: con contraseña. */
+export interface ClienteMock extends ClienteResponse {
+  password: string;
 }
 
 export const PROFESIONAL_MOCK: ProfesionalResponse = {
@@ -18,6 +25,16 @@ export const PROFESIONAL_MOCK: ProfesionalResponse = {
   slug: 'laura-gomez',
   telefono: '11 5555-1234',
 };
+
+export const CLIENTES_MOCK: ClienteMock[] = [
+  {
+    publicId: 'c3d9e1a0-0000-4000-8000-000000000001',
+    nombre: 'Ana López',
+    email: 'ana@demo.com',
+    telefono: '11 1234-5678',
+    password: '12345678',
+  },
+];
 
 export const SERVICIOS_MOCK: ServicioResponse[] = [
   { publicId: 'a1f4c2d0-0000-4000-8000-000000000001', nombre: 'Corte de pelo', duracionMin: 30, precio: 8000, activo: true },
@@ -59,6 +76,24 @@ function turnoMock(
     fechaHoraFin: `${fecha}T${horaFin}`,
     estado,
     cancelacionToken: `cancelar-${publicId}`,
+    clientePublicId: null,
+  };
+}
+
+/** Turno de ejemplo reservado por la clienta demo con su cuenta. */
+function turnoDeAna(
+  publicId: string,
+  servicio: ServicioResponse,
+  fecha: string,
+  hora: string,
+  estado: EstadoTurno,
+): TurnoMock {
+  const ana = CLIENTES_MOCK[0];
+  return {
+    ...turnoMock(publicId, servicio, fecha, hora, ana.nombre, estado),
+    clientePublicId: ana.publicId,
+    clienteTelefono: ana.telefono,
+    clienteEmail: ana.email,
   };
 }
 
@@ -70,4 +105,6 @@ export const TURNOS_MOCK: TurnoMock[] = [
   turnoMock('t-03', corte, diaHabilEnDias(1), '09:30', 'Juan Torres', 'PENDIENTE'),
   turnoMock('t-04', coloracion, diaHabilEnDias(1), '15:00', 'Camila Ruiz', 'PENDIENTE'),
   turnoMock('t-05', corte, diaHabilEnDias(2), '11:00', 'Lucas Romero', 'CANCELADO'),
+  turnoDeAna('t-06', corteYBarba, sumarDias(diaHabilEnDias(0), -7), '11:00', 'COMPLETADO'),
+  turnoDeAna('t-07', corte, diaHabilEnDias(3), '10:00', 'CONFIRMADO'),
 ];
