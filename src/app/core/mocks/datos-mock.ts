@@ -1,0 +1,73 @@
+import { aHora, aMinutos, fechaEnDias } from '../../shared/utils/tiempo';
+import { DisponibilidadResponse } from '../models/disponibilidad.model';
+import { ExcepcionResponse } from '../models/excepcion.model';
+import { ProfesionalResponse } from '../models/profesional.model';
+import { ServicioResponse } from '../models/servicio.model';
+import { EstadoTurno, TurnoAgendaResponse } from '../models/turno.model';
+
+/** Turno tal como lo guarda el mock: lo que ve la agenda más los datos internos. */
+export interface TurnoMock extends TurnoAgendaResponse {
+  servicioPublicId: string;
+  cancelacionToken: string;
+}
+
+export const PROFESIONAL_MOCK: ProfesionalResponse = {
+  publicId: '7b1c2f0e-0000-4000-8000-000000000001',
+  nombre: 'Laura Gómez',
+  email: 'laura@demo.com',
+  slug: 'laura-gomez',
+  telefono: '11 5555-1234',
+};
+
+export const SERVICIOS_MOCK: ServicioResponse[] = [
+  { publicId: 'a1f4c2d0-0000-4000-8000-000000000001', nombre: 'Corte de pelo', duracionMin: 30, precio: 8000, activo: true },
+  { publicId: 'a1f4c2d0-0000-4000-8000-000000000002', nombre: 'Corte y barba', duracionMin: 45, precio: 11000, activo: true },
+  { publicId: 'a1f4c2d0-0000-4000-8000-000000000003', nombre: 'Coloración', duracionMin: 90, precio: 25000, activo: true },
+];
+
+// Lunes a viernes de 9 a 13 y de 15 a 19, sábados de 9 a 13.
+const DIAS_HABILES = [1, 2, 3, 4, 5];
+
+export const DISPONIBILIDADES_MOCK: DisponibilidadResponse[] = [
+  ...DIAS_HABILES.map((dia) => ({ id: dia, diaSemana: dia, horaInicio: '09:00', horaFin: '13:00' })),
+  ...DIAS_HABILES.map((dia) => ({ id: dia + 10, diaSemana: dia, horaInicio: '15:00', horaFin: '19:00' })),
+  { id: 6, diaSemana: 6, horaInicio: '09:00', horaFin: '13:00' },
+];
+
+export const EXCEPCIONES_MOCK: ExcepcionResponse[] = [
+  { id: 1, fecha: fechaEnDias(2), horaInicio: '15:00', horaFin: '17:00', motivo: 'Trámite personal' },
+  { id: 2, fecha: fechaEnDias(10), horaInicio: null, horaFin: null, motivo: 'Feriado' },
+];
+
+function turnoMock(
+  publicId: string,
+  servicio: ServicioResponse,
+  fecha: string,
+  hora: string,
+  clienteNombre: string,
+  estado: EstadoTurno,
+): TurnoMock {
+  const horaFin = aHora(aMinutos(hora) + servicio.duracionMin);
+  return {
+    publicId,
+    servicioPublicId: servicio.publicId,
+    servicioNombre: servicio.nombre,
+    clienteNombre,
+    clienteTelefono: '11 4000-0000',
+    clienteEmail: null,
+    fechaHoraInicio: `${fecha}T${hora}`,
+    fechaHoraFin: `${fecha}T${horaFin}`,
+    estado,
+    cancelacionToken: `cancelar-${publicId}`,
+  };
+}
+
+const [corte, corteYBarba, coloracion] = SERVICIOS_MOCK;
+
+export const TURNOS_MOCK: TurnoMock[] = [
+  turnoMock('t-01', corte, fechaEnDias(0), '09:00', 'Martín Pérez', 'COMPLETADO'),
+  turnoMock('t-02', corteYBarba, fechaEnDias(0), '10:00', 'Sofía Díaz', 'CONFIRMADO'),
+  turnoMock('t-03', corte, fechaEnDias(1), '09:30', 'Juan Torres', 'PENDIENTE'),
+  turnoMock('t-04', coloracion, fechaEnDias(1), '15:00', 'Camila Ruiz', 'PENDIENTE'),
+  turnoMock('t-05', corte, fechaEnDias(2), '11:00', 'Lucas Romero', 'CANCELADO'),
+];
