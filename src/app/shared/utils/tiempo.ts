@@ -30,3 +30,23 @@ export function fechaEnDias(dias: number): string {
 export function diaSemana(fecha: string): number {
   return new Date(`${fecha}T00:00`).getDay();
 }
+
+/**
+ * Fecha "yyyy-MM-dd" del día hábil (lunes a viernes) número `cantidad`, contando desde hoy.
+ * 0 = hoy si es día hábil; si hoy es fin de semana, el lunes siguiente.
+ */
+export function diaHabilEnDias(cantidad: number): string {
+  const fecha = new Date();
+  avanzarHastaDiaHabil(fecha);
+  for (let i = 0; i < cantidad; i++) {
+    fecha.setDate(fecha.getDate() + 1);
+    avanzarHastaDiaHabil(fecha);
+  }
+  return formatoFecha(fecha);
+}
+
+function avanzarHastaDiaHabil(fecha: Date): void {
+  while (fecha.getDay() === 0 || fecha.getDay() === 6) {
+    fecha.setDate(fecha.getDate() + 1);
+  }
+}

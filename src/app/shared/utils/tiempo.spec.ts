@@ -1,4 +1,5 @@
-import { aHora, aMinutos, diaSemana, formatoFecha } from './tiempo';
+import { vi } from 'vitest';
+import { aHora, aMinutos, diaHabilEnDias, diaSemana, formatoFecha } from './tiempo';
 
 describe('tiempo', () => {
   it('convierte "HH:mm" a minutos', () => {
@@ -16,5 +17,31 @@ describe('tiempo', () => {
   it('usa domingo = 0 igual que el back', () => {
     expect(diaSemana('2030-01-06')).toBe(0); // domingo
     expect(diaSemana('2030-01-07')).toBe(1); // lunes
+  });
+});
+
+describe('diaHabilEnDias', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function hoyEs(anio: number, mes: number, dia: number): void {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(anio, mes - 1, dia));
+  }
+
+  it('si hoy es día hábil, el día 0 es hoy', () => {
+    hoyEs(2030, 1, 7); // lunes
+    expect(diaHabilEnDias(0)).toBe('2030-01-07');
+  });
+
+  it('si hoy es sábado, el día 0 es el lunes', () => {
+    hoyEs(2030, 1, 5); // sábado
+    expect(diaHabilEnDias(0)).toBe('2030-01-07');
+  });
+
+  it('saltea el fin de semana al avanzar', () => {
+    hoyEs(2030, 1, 10); // jueves
+    expect(diaHabilEnDias(2)).toBe('2030-01-14'); // lunes
   });
 });

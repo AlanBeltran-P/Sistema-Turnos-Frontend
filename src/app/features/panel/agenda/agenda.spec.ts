@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { clickEnBoton, escribir, textoEnPantalla } from '../../../shared/testing/pantalla';
-import { fechaEnDias } from '../../../shared/utils/tiempo';
+import { diaHabilEnDias, fechaEnDias } from '../../../shared/utils/tiempo';
 import { Agenda } from './agenda';
 
 describe('Agenda', () => {
@@ -28,7 +28,7 @@ describe('Agenda', () => {
   });
 
   it('filtra por rango de fechas', async () => {
-    await filtrar(fechaEnDias(1), fechaEnDias(1));
+    await filtrar(diaHabilEnDias(1), diaHabilEnDias(1));
     expect(textoEnPantalla(fixture)).toContain('Juan Torres');
     expect(textoEnPantalla(fixture)).not.toContain('Martín Pérez');
   });
@@ -39,8 +39,8 @@ describe('Agenda', () => {
   });
 
   it('marca un turno como completado', async () => {
-    // Hoy hay un turno completado y uno confirmado (el único con botones).
-    await filtrar(fechaEnDias(0), fechaEnDias(0));
+    // El primer día hábil hay un turno completado y uno confirmado (el único con botones).
+    await filtrar(diaHabilEnDias(0), diaHabilEnDias(0));
     await clickEnBoton(fixture, 'Completado');
     expect(cantidadConEstado('COMPLETADO')).toBe(2);
   });

@@ -1,4 +1,4 @@
-import { aHora, aMinutos, fechaEnDias } from '../../shared/utils/tiempo';
+import { aHora, aMinutos, diaHabilEnDias } from '../../shared/utils/tiempo';
 import { DisponibilidadResponse } from '../models/disponibilidad.model';
 import { ExcepcionResponse } from '../models/excepcion.model';
 import { ProfesionalResponse } from '../models/profesional.model';
@@ -35,8 +35,8 @@ export const DISPONIBILIDADES_MOCK: DisponibilidadResponse[] = [
 ];
 
 export const EXCEPCIONES_MOCK: ExcepcionResponse[] = [
-  { id: 1, fecha: fechaEnDias(2), horaInicio: '15:00', horaFin: '17:00', motivo: 'Trámite personal' },
-  { id: 2, fecha: fechaEnDias(10), horaInicio: null, horaFin: null, motivo: 'Feriado' },
+  { id: 1, fecha: diaHabilEnDias(2), horaInicio: '15:00', horaFin: '17:00', motivo: 'Trámite personal' },
+  { id: 2, fecha: diaHabilEnDias(7), horaInicio: null, horaFin: null, motivo: 'Feriado' },
 ];
 
 function turnoMock(
@@ -65,9 +65,9 @@ function turnoMock(
 const [corte, corteYBarba, coloracion] = SERVICIOS_MOCK;
 
 export const TURNOS_MOCK: TurnoMock[] = [
-  turnoMock('t-01', corte, fechaEnDias(0), '09:00', 'Martín Pérez', 'COMPLETADO'),
-  turnoMock('t-02', corteYBarba, fechaEnDias(0), '10:00', 'Sofía Díaz', 'CONFIRMADO'),
-  turnoMock('t-03', corte, fechaEnDias(1), '09:30', 'Juan Torres', 'PENDIENTE'),
-  turnoMock('t-04', coloracion, fechaEnDias(1), '15:00', 'Camila Ruiz', 'PENDIENTE'),
-  turnoMock('t-05', corte, fechaEnDias(2), '11:00', 'Lucas Romero', 'CANCELADO'),
+  turnoMock('t-01', corte, diaHabilEnDias(0), '09:00', 'Martín Pérez', 'COMPLETADO'),
+  turnoMock('t-02', corteYBarba, diaHabilEnDias(0), '10:00', 'Sofía Díaz', 'CONFIRMADO'),
+  turnoMock('t-03', corte, diaHabilEnDias(1), '09:30', 'Juan Torres', 'PENDIENTE'),
+  turnoMock('t-04', coloracion, diaHabilEnDias(1), '15:00', 'Camila Ruiz', 'PENDIENTE'),
+  turnoMock('t-05', corte, diaHabilEnDias(2), '11:00', 'Lucas Romero', 'CANCELADO'),
 ];
