@@ -1,0 +1,48 @@
+.inicio {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.ayuda {
+  color: var(--color-suave);
+}
+
+.opciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+h2,
+p {
+  margin: 0;
+}
+
+/* Link con forma de botón */
+.boton {
+  padding: 0.6rem 1rem;
+  border-radius: var(--radio);
+  background: var(--color-primario);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+.boton:hover {
+  background: var(--color-primario-oscuro);
+}
+
+a:not(.boton) {
+  font-size: 0.9rem;
+  color: var(--color-primario);
+}

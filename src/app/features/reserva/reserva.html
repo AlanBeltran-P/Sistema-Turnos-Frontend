@@ -1,5 +1,8 @@
 <main class="reserva">
   <h1>Reservá tu turno</h1>
+  @if (profesional(); as profesional) {
+    <p class="subtitulo">con {{ profesional.nombre }}</p>
+  }
 
   @if (error()) {
     <p class="error">{{ error() }}</p>
@@ -16,8 +19,12 @@
           <strong>{{ turno.servicioNombre }}</strong> —
           {{ turno.fechaHoraInicio | date: "EEEE d/M/yyyy 'a las' HH:mm" }} hs
         </p>
-        <p>Guardá este código por si necesitás cancelar:</p>
+        <p>Guardá este código por si necesitás cancelar más adelante:</p>
         <p><code>{{ turno.cancelacionToken }}</code></p>
+        <p>
+          O guardá este link:
+          <a [routerLink]="['/cancelar', turno.cancelacionToken]">cancelar mi turno</a>
+        </p>
         <button type="button" class="secundario" (click)="cancelar()">Cancelar turno</button>
       }
     </section>

@@ -4,6 +4,11 @@
   padding: 2rem 1rem;
 }
 
+.subtitulo {
+  margin-top: -0.5rem;
+  color: var(--color-suave);
+}
+
 section {
   margin-bottom: 2rem;
 }

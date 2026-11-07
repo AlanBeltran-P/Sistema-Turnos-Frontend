@@ -1,0 +1,25 @@
+.cancelar {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 480px;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.ayuda {
+  color: var(--color-suave);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

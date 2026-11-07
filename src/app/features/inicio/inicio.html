@@ -1,0 +1,19 @@
+<main class="inicio">
+  <h1>Sistema de Turnos</h1>
+  <p class="ayuda">Reservá un turno sin crear una cuenta, o gestioná tu agenda si sos profesional.</p>
+
+  <div class="opciones">
+    <section class="tarjeta">
+      <h2>Soy cliente</h2>
+      <p>Elegí servicio, día y horario. Solo necesitás tu nombre y teléfono.</p>
+      <a class="boton" [routerLink]="['/reservar', slugDemo]">Reservar un turno</a>
+      <a routerLink="/cancelar">Tengo un código y quiero cancelar</a>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Soy profesional</h2>
+      <p>Administrá tu agenda, servicios, horarios y excepciones.</p>
+      <a class="boton" routerLink="/login">Ingresar al panel</a>
+    </section>
+  </div>
+</main>

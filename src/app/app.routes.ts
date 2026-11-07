@@ -2,7 +2,11 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./features/inicio/inicio').then((m) => m.Inicio),
+  },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
@@ -10,6 +14,14 @@ export const routes: Routes = [
   {
     path: 'reservar/:slug',
     loadComponent: () => import('./features/reserva/reserva').then((m) => m.Reserva),
+  },
+  {
+    path: 'cancelar',
+    loadComponent: () => import('./features/cancelar/cancelar').then((m) => m.Cancelar),
+  },
+  {
+    path: 'cancelar/:token',
+    loadComponent: () => import('./features/cancelar/cancelar').then((m) => m.Cancelar),
   },
   {
     path: 'panel',

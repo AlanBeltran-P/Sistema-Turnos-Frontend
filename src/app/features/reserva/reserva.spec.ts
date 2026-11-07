@@ -1,19 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { provideRouter } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { clickEnBoton, escribir, textoEnPantalla } from '../../shared/testing/pantalla';
 import { Reserva } from './reserva';
 
 const LUNES = '2030-01-07';
 
 describe('Reserva', () => {
-  let fixture: ComponentFixture<Reserva>;
+  let fixture: ComponentFixture<unknown>;
 
   async function abrirPantalla(slug: string): Promise<void> {
     TestBed.configureTestingModule({
-      imports: [Reserva],
-      providers: [{ provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ slug }) } } }],
+      providers: [provideRouter([{ path: 'reservar/:slug', component: Reserva }])],
     });
-    fixture = TestBed.createComponent(Reserva);
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl(`/reservar/${slug}`);
+    fixture = harness.fixture;
     await fixture.whenStable();
   }
 
@@ -61,6 +63,18 @@ describe('Reserva', () => {
     await elegirCorteDelLunesALas9();
     const botonReservar = fixture.nativeElement.querySelector('button[type="submit"]') as HTMLButtonElement;
     expect(botonReservar.disabled).toBe(true);
+  });
+
+  it('muestra con qué profesional se reserva', async () => {
+    await abrirPantalla('laura-gomez');
+    expect(textoEnPantalla(fixture)).toContain('con Laura Gómez');
+  });
+
+  it('la confirmación trae el link para cancelar más adelante', async () => {
+    await abrirPantalla('laura-gomez');
+    await elegirCorteDelLunesALas9();
+    await completarDatosYReservar();
+    expect(fixture.nativeElement.querySelector('a[href^="/cancelar/"]')).toBeTruthy();
   });
 
   it('permite cancelar el turno recién reservado', async () => {

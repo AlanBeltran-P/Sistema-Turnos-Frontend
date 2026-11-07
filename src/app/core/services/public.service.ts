@@ -5,6 +5,7 @@ import { calcularSlots } from '../mocks/calculadora-slots';
 import { TurnoMock } from '../mocks/datos-mock';
 import { MockDb } from '../mocks/mock-db';
 import { SlotDisponibleResponse } from '../models/disponibilidad.model';
+import { ProfesionalPublicoResponse } from '../models/profesional.model';
 import { ServicioResponse } from '../models/servicio.model';
 import { ReservaRequest, TurnoResponse } from '../models/turno.model';
 
@@ -12,6 +13,14 @@ import { ReservaRequest, TurnoResponse } from '../models/turno.model';
 @Injectable({ providedIn: 'root' })
 export class PublicService {
   private readonly db = inject(MockDb);
+
+  /** No existe en el back: habría que agregar GET /api/public/profesionales/{slug}. */
+  obtenerProfesional(slug: string): Observable<ProfesionalPublicoResponse> {
+    if (!this.existeProfesional(slug)) {
+      return error('Profesional no encontrado');
+    }
+    return of({ nombre: this.db.profesional.nombre, slug });
+  }
 
   listarServicios(slug: string): Observable<ServicioResponse[]> {
     if (!this.existeProfesional(slug)) {

@@ -1,8 +1,9 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SlotDisponibleResponse } from '../../core/models/disponibilidad.model';
+import { ProfesionalPublicoResponse } from '../../core/models/profesional.model';
 import { ServicioResponse } from '../../core/models/servicio.model';
 import { ReservaRequest, TurnoResponse } from '../../core/models/turno.model';
 import { PublicService } from '../../core/services/public.service';
@@ -11,7 +12,7 @@ import { fechaEnDias } from '../../shared/utils/tiempo';
 /** Pantalla pública /reservar/:slug: servicio → día → horario → datos → confirmación. */
 @Component({
   selector: 'app-reserva',
-  imports: [FormsModule, CurrencyPipe, DatePipe],
+  imports: [FormsModule, CurrencyPipe, DatePipe, RouterLink],
   templateUrl: './reserva.html',
   styleUrl: './reserva.css',
 })
@@ -20,6 +21,7 @@ export class Reserva implements OnInit {
   private readonly slug = inject(ActivatedRoute).snapshot.paramMap.get('slug') ?? '';
 
   protected readonly hoy = fechaEnDias(0);
+  protected readonly profesional = signal<ProfesionalPublicoResponse | null>(null);
   protected readonly servicios = signal<ServicioResponse[]>([]);
   protected readonly servicioElegido = signal<ServicioResponse | null>(null);
   protected readonly fecha = signal('');
@@ -35,6 +37,10 @@ export class Reserva implements OnInit {
   protected readonly email = signal('');
 
   ngOnInit(): void {
+    this.publicService.obtenerProfesional(this.slug).subscribe({
+      next: (profesional) => this.profesional.set(profesional),
+      error: (error: Error) => this.error.set(error.message),
+    });
     this.publicService.listarServicios(this.slug).subscribe({
       next: (servicios) => this.servicios.set(servicios),
       error: (error: Error) => this.error.set(error.message),

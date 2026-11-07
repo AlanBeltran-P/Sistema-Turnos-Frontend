@@ -1,0 +1,22 @@
+<main class="cancelar">
+  <section class="tarjeta">
+    @if (cancelado()) {
+      <h1>Turno cancelado</h1>
+      <p>Listo, tu turno fue cancelado y el horario quedó libre.</p>
+      <a routerLink="/">Volver al inicio</a>
+    } @else {
+      <h1>Cancelar un turno</h1>
+      <p class="ayuda">Pegá el código que recibiste al reservar.</p>
+      <form #formulario="ngForm" (ngSubmit)="cancelar()">
+        <label>
+          Código de cancelación
+          <input name="codigo" [(ngModel)]="codigo" required />
+        </label>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+        <button type="submit" [disabled]="formulario.invalid">Cancelar turno</button>
+      </form>
+    }
+  </section>
+</main>

@@ -30,6 +30,11 @@ describe('PublicService', () => {
     return slots.map((slot) => slot.horaInicio);
   }
 
+  it('devuelve los datos públicos del profesional', async () => {
+    const profesional = await firstValueFrom(service.obtenerProfesional(SLUG));
+    expect(profesional).toEqual({ nombre: 'Laura Gómez', slug: SLUG });
+  });
+
   it('lista los servicios activos del profesional', async () => {
     const servicios = await firstValueFrom(service.listarServicios(SLUG));
     expect(servicios.length).toBe(3);
