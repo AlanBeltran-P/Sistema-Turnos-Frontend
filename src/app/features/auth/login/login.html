@@ -1,0 +1,15 @@
+<main class="login">
+  <form class="tarjeta" #formulario="ngForm" (ngSubmit)="ingresar()">
+    <h1>Ingresar al panel</h1>
+    <p class="aviso">Modo demo: funciona cualquier email y contraseña de 8 caracteres o más.</p>
+    <label>
+      Email
+      <input name="email" type="email" [(ngModel)]="email" required email />
+    </label>
+    <label>
+      Contraseña
+      <input name="password" type="password" [(ngModel)]="password" required minlength="8" />
+    </label>
+    <button type="submit" [disabled]="formulario.invalid">Ingresar</button>
+  </form>
+</main>

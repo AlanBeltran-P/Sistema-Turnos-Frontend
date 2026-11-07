@@ -1,0 +1,14 @@
+<div class="panel">
+  <aside class="menu">
+    <p class="nombre">{{ profesional.nombre }}</p>
+    <nav>
+      <a routerLink="agenda" routerLinkActive="activo">Agenda</a>
+    </nav>
+    <a class="link-publico" [routerLink]="['/reservar', profesional.slug]">Ver mi página de reservas</a>
+    <button type="button" class="secundario" (click)="salir()">Salir</button>
+  </aside>
+
+  <main class="contenido">
+    <router-outlet />
+  </main>
+</div>

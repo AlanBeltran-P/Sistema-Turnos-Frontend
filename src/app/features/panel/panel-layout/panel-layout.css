@@ -1,0 +1,65 @@
+.panel {
+  display: flex;
+  min-height: 100vh;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 220px;
+  padding: 1.5rem 1rem;
+  background: white;
+  border-right: 1px solid var(--color-borde);
+}
+
+.nombre {
+  margin: 0;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+nav a {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: var(--color-fondo);
+}
+
+nav a.activo {
+  background: var(--color-primario);
+  color: white;
+}
+
+.link-publico {
+  font-size: 0.85rem;
+  color: var(--color-primario);
+}
+
+.contenido {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* En pantallas chicas el menú pasa arriba */
+@media (max-width: 700px) {
+  .panel {
+    flex-direction: column;
+  }
+
+  .menu {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-borde);
+  }
+}

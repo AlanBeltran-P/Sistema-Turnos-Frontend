@@ -1,0 +1,55 @@
+<h1>Agenda</h1>
+
+<form class="filtros" (ngSubmit)="buscar()">
+  <label>
+    Desde
+    <input type="date" name="desde" [(ngModel)]="desde" />
+  </label>
+  <label>
+    Hasta
+    <input type="date" name="hasta" [(ngModel)]="hasta" />
+  </label>
+  <button type="submit">Buscar</button>
+</form>
+
+@if (turnos().length === 0) {
+  <p>No hay turnos en estas fechas.</p>
+} @else {
+  <table class="tarjeta">
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>Hora</th>
+        <th>Servicio</th>
+        <th>Cliente</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (turno of turnos(); track turno.publicId) {
+        <tr>
+          <td>{{ turno.fechaHoraInicio | date: 'EEE d/M' }}</td>
+          <td>{{ turno.fechaHoraInicio | date: 'HH:mm' }} a {{ turno.fechaHoraFin | date: 'HH:mm' }}</td>
+          <td>{{ turno.servicioNombre }}</td>
+          <td>
+            {{ turno.clienteNombre }}<br />
+            <small>{{ turno.clienteTelefono }}</small>
+          </td>
+          <td>
+            <span class="estado" [attr.data-estado]="turno.estado">{{ etiquetas[turno.estado] }}</span>
+          </td>
+          <td>
+            @if (esModificable(turno)) {
+              <div class="acciones">
+                <button type="button" (click)="cambiarEstado(turno, 'COMPLETADO')">Completado</button>
+                <button type="button" class="secundario" (click)="cambiarEstado(turno, 'AUSENTE')">Ausente</button>
+                <button type="button" class="secundario" (click)="cambiarEstado(turno, 'CANCELADO')">Cancelar</button>
+              </div>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

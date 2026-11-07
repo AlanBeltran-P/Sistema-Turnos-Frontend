@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { clickEnBoton, escribir, textoEnPantalla } from '../../shared/testing/pantalla';
 import { Reserva } from './reserva';
 
 const LUNES = '2030-01-07';
@@ -16,55 +17,42 @@ describe('Reserva', () => {
     await fixture.whenStable();
   }
 
-  function textoEnPantalla(): string {
-    return (fixture.nativeElement as HTMLElement).textContent ?? '';
-  }
-
-  async function clickEnBoton(texto: string): Promise<void> {
-    const botones = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('button'));
-    botones.find((boton) => boton.textContent?.includes(texto))!.click();
-    await fixture.whenStable();
-  }
-
-  async function escribir(nombreInput: string, valor: string): Promise<void> {
-    const input = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(`input[name="${nombreInput}"]`)!;
-    input.value = valor;
-    input.dispatchEvent(new Event('input'));
-    await fixture.whenStable();
-  }
-
   async function elegirCorteDelLunesALas9(): Promise<void> {
-    await clickEnBoton('Corte de pelo');
-    await escribir('fecha', LUNES);
-    await clickEnBoton('09:00');
+    await clickEnBoton(fixture, 'Corte de pelo');
+    await escribir(fixture, 'fecha', LUNES);
+    await clickEnBoton(fixture, '09:00');
+  }
+
+  async function completarDatosYReservar(): Promise<void> {
+    await escribir(fixture, 'nombre', 'Ana López');
+    await escribir(fixture, 'telefono', '11 1234-5678');
+    await clickEnBoton(fixture, 'Reservar turno');
   }
 
   it('muestra los servicios del profesional', async () => {
     await abrirPantalla('laura-gomez');
-    expect(textoEnPantalla()).toContain('Corte de pelo');
-    expect(textoEnPantalla()).toContain('Coloración');
+    expect(textoEnPantalla(fixture)).toContain('Corte de pelo');
+    expect(textoEnPantalla(fixture)).toContain('Coloración');
   });
 
   it('muestra un error si el profesional no existe', async () => {
     await abrirPantalla('no-existe');
-    expect(textoEnPantalla()).toContain('Profesional no encontrado');
+    expect(textoEnPantalla(fixture)).toContain('Profesional no encontrado');
   });
 
   it('al elegir servicio y día muestra los horarios libres', async () => {
     await abrirPantalla('laura-gomez');
-    await clickEnBoton('Corte de pelo');
-    await escribir('fecha', LUNES);
-    expect(textoEnPantalla()).toContain('09:00');
-    expect(textoEnPantalla()).toContain('18:30');
+    await clickEnBoton(fixture, 'Corte de pelo');
+    await escribir(fixture, 'fecha', LUNES);
+    expect(textoEnPantalla(fixture)).toContain('09:00');
+    expect(textoEnPantalla(fixture)).toContain('18:30');
   });
 
   it('reserva un turno y muestra el código de cancelación', async () => {
     await abrirPantalla('laura-gomez');
     await elegirCorteDelLunesALas9();
-    await escribir('nombre', 'Ana López');
-    await escribir('telefono', '11 1234-5678');
-    await clickEnBoton('Reservar turno');
-    expect(textoEnPantalla()).toContain('¡Turno reservado!');
+    await completarDatosYReservar();
+    expect(textoEnPantalla(fixture)).toContain('¡Turno reservado!');
     expect(fixture.nativeElement.querySelector('code')?.textContent).toBeTruthy();
   });
 
@@ -78,10 +66,8 @@ describe('Reserva', () => {
   it('permite cancelar el turno recién reservado', async () => {
     await abrirPantalla('laura-gomez');
     await elegirCorteDelLunesALas9();
-    await escribir('nombre', 'Ana López');
-    await escribir('telefono', '11 1234-5678');
-    await clickEnBoton('Reservar turno');
-    await clickEnBoton('Cancelar turno');
-    expect(textoEnPantalla()).toContain('Turno cancelado');
+    await completarDatosYReservar();
+    await clickEnBoton(fixture, 'Cancelar turno');
+    expect(textoEnPantalla(fixture)).toContain('Turno cancelado');
   });
 });
